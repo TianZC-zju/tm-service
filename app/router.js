@@ -7,5 +7,6 @@ module.exports = app => {
   require('./router/default')(app);
   require('./router/admin')(app);
   require('./router/stu')(app);
+  require('./router/ins')(app);
 
 };
