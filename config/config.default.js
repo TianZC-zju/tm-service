@@ -41,15 +41,15 @@ module.exports = appInfo => {
     // load into agent, default is close
     agent: false,
   };
-  　　config.security = {
-    　　　　csrf: {enable: false},
-    　　　　domainWhiteList: [ '*' ]
-    　　};
-     config.cors = {
-        origin:'http://localhost:3000',
-        credentials:true, //允许cookie跨域
-        allowMethods: 'GET,HEAD,PUT,POST,DELETE,PATCH,OPTIONS'
-    };
+  config.security = {
+    csrf: { enable: false },
+    domainWhiteList: [ '*' ],
+  };
+  config.cors = {
+    origin: 'http://localhost:3000',
+    credentials: true, // 允许cookie跨域
+    allowMethods: 'GET,HEAD,PUT,POST,DELETE,PATCH,OPTIONS',
+  };
   return {
     ...config,
     ...userConfig,
