@@ -13,6 +13,14 @@ class StuController extends Controller {
       insertId: re.insertId,
     };
   }
+  async updateInsInfo() {
+    const insInfoItem = this.ctx.request.body;
+    const re = await this.app.mysql.update('edu_institution', insInfoItem);
+    const updateSuccess = re.affectedRows === 1;
+    this.ctx.body = {
+      updateSuccess,
+    };
+  }
   async newACourse() {
     const { courseItem, selectTeacherList } = this.ctx.request.body;
     const re = await this.app.mysql.insert('course', courseItem);
@@ -75,6 +83,23 @@ class StuController extends Controller {
     const teacherList = await this.app.mysql.query(sql2);
 
     this.ctx.body = { activityList, teacherList };
+  }
+  async getAllStudentByInsId() {
+    const insId = this.ctx.params.id;
+    const sql = 'SELECT student.name, student.phone, student.gender ' +
+    'FROM activity, student_activity, student ' +
+    'where student_activity.activity_id = activity.id and student.id = student_activity.student_id and activity.edu_institution =' + insId;
+    const studentList = await this.app.mysql.query(sql);
+
+    this.ctx.body = { studentList };
+  }
+  async getInsInfoByInsId() {
+    const insId = this.ctx.params.id;
+    const sql = 'SELECT edu_institution.name, edu_institution.introduction, edu_institution.logo ' +
+    'FROM edu_institution ' +
+    'where edu_institution.id = ' + insId;
+    const insInfo = await this.app.mysql.query(sql);
+    this.ctx.body = { insInfo };
   }
 
 }
