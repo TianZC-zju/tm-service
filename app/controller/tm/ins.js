@@ -56,6 +56,20 @@ class StuController extends Controller {
 
     this.ctx.body = { activityList };
   }
+  async getActivityByActivityId() {
+    const activityId = this.ctx.request.body.activityId;
+    const sql = 'SELECT * ' +
+        'FROM activity WHERE activity.id=' + activityId;
+    const activityList = await this.app.mysql.query(sql);
+    for (let i = 0; i < activityList.length; i++) {
+      const sql2 = 'SELECT * FROM course WHERE course.activity=' + activityList[i].id;
+      const sql3 = 'SELECT * FROM edu_institution WHERE edu_institution.id=' + activityList[i].edu_institution;
+      activityList[i].courses = await this.app.mysql.query(sql2);
+      activityList[i].insInfo = (await this.app.mysql.query(sql3))[0];
+    }
+
+    this.ctx.body = { activityList };
+  }
   async getAllCourseListByInsId() {
     const insId = this.ctx.params.id;
     const sql = 'SELECT * ' +
