@@ -7,6 +7,7 @@ module.exports = app => {
   router.post('/tm/newACourse', controller.tm.ins.newACourse);
   router.post('/tm/updateInsInfo', controller.tm.ins.updateInsInfo);
   router.get('/tm/getAllActivityByInsid/:id', controller.tm.ins.getAllActivityByInsid);
+  router.get('/tm/getAllStudentByCourseId/:id', controller.tm.ins.getAllStudentByCourseId);
   router.post('/tm/getActivityByActivityId', controller.tm.ins.getActivityByActivityId);
   router.get('/tm/getAllCourseListByInsId/:id', controller.tm.ins.getAllCourseListByInsId);
   router.get('/tm/getAllTeacherAndActivityByInsId/:id', controller.tm.ins.getAllTeacherAndActivityByInsId);

@@ -107,6 +107,15 @@ class StuController extends Controller {
 
     this.ctx.body = { studentList };
   }
+  async getAllStudentByCourseId() {
+    const courseId = this.ctx.params.id;
+    const sql = 'SELECT student.id, student.name, student.phone, student_course.score, student_course.course_id ' +
+    'FROM student_course, student ' +
+    'where student_course.student_id = student.id and student_course.course_id = ' + courseId;
+    const studentList = await this.app.mysql.query(sql);
+
+    this.ctx.body = { studentList };
+  }
   async getInsInfoByInsId() {
     const insId = this.ctx.params.id;
     const sql = 'SELECT edu_institution.name, edu_institution.introduction, edu_institution.logo ' +
