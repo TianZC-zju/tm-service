@@ -6,6 +6,10 @@ module.exports = app => {
   router.post('/admin/checkLogin', controller.admin.main.checkLogin);
   router.post('/tm/updateStuInfo', controller.tm.stu.updateStuInfo);
   router.post('/tm/postActivityByid', controller.tm.stu.postActivityByid);
+  router.post('/tm/getAllActiviyByState', controller.tm.stu.getAllActiviyByState);
+  router.post('/tm/isStuHasActivity', controller.tm.stu.isStuHasActivity);
+  router.post('/tm/stuAddActivity', controller.tm.stu.stuAddActivity);
+  router.post('/tm/getCAByStuId', controller.tm.stu.getCAByStuId);
   router.get('/tm/getStuInfoById/:id', controller.tm.stu.getStuInfoById);
   router.get('/tm/getAllActivityByStuId/:id', controller.tm.stu.getAllActivityByStuId);
   router.get('/tm/getAllActivity', controller.tm.stu.getAllActivity);

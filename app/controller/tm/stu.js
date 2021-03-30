@@ -60,6 +60,69 @@ class StuController extends Controller {
       data:result1,
     };
   }
+  async isStuHasActivity() {
+    const activityId = this.ctx.request.body.activityId;
+    const stuId = this.ctx.request.body.stuId;
+
+    const sql = `SELECT *  
+        FROM student_activity 
+        WHERE student_activity.student_id=${stuId} 
+        AND student_activity.activity_id=${activityId}`;
+    const result = await this.app.mysql.query(sql);
+
+    this.ctx.body = {
+      result,
+    };
+  }
+  async getCAByStuId() {
+    const stuId = this.ctx.request.body.stuId;
+
+    const sql = `SELECT certificate.id, certificate.picSrc, certificate.chain_info, activity.topic,activity.description    
+        FROM certificate, activity   
+        WHERE certificate.student_id=${stuId} 
+        AND certificate.activity_id=activity.id`;
+    const activityList = await this.app.mysql.query(sql);
+
+    this.ctx.body = {
+      activityList,
+    };
+  }
+  async stuAddActivity() {
+    const activityId = this.ctx.request.body.activityId;
+    const stuId = this.ctx.request.body.stuId;
+
+    const re = await this.app.mysql.insert('student_activity', {
+      student_id: stuId,
+      activity_id: activityId,
+    });
+    let insertSuccess = re.affectedRows === 1;
+    const sql2 = `SELECT course.id FROM course WHERE course.activity=${activityId}`
+    const courseList = await this.app.mysql.query(sql2);
+    for (let i = 0; i < courseList.length; i++) {
+      const re2 = await this.app.mysql.insert('student_course', {
+        student_id: stuId,
+        course_id: courseList[i].id,
+        score: 0,
+      });
+      insertSuccess = insertSuccess && (re2.affectedRows === 1);
+    }
+
+    this.ctx.body = {
+      insertSuccess,
+    };
+
+  }
+  async getAllActiviyByState() {
+    const state = this.ctx.request.body.state;
+
+    const sql = `SELECT activity.topic,activity.description,activity.seal, activity.id, edu_institution.name 
+        FROM activity, edu_institution WHERE activity.state=${state} AND activity.edu_institution=edu_institution.id` ;
+    const activityList = await this.app.mysql.query(sql);
+
+    this.ctx.body = {
+      activityList,
+    };
+  }
 
   async getTypeInfo() {
     const resType = await this.app.mysql.select('type');
