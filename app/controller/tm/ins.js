@@ -21,6 +21,19 @@ class StuController extends Controller {
       updateSuccess,
     };
   }
+  async updateScore() {
+    const { scoreList } = this.ctx.request.body;
+    let updateSuccess = true;
+    for (const index in scoreList) {
+      const item = scoreList[index];
+      const sql = `UPDATE student_course SET  score = ${item.score} WHERE student_id = ${item.id} AND course_id = ${item.course_id}`;
+      const re = await this.app.mysql.query(sql);
+      updateSuccess = updateSuccess && (re.affectedRows === 1);
+    }
+    this.ctx.body = {
+      updateSuccess,
+    };
+  }
   async newACourse() {
     const { courseItem, selectTeacherList } = this.ctx.request.body;
     const re = await this.app.mysql.insert('course', courseItem);
@@ -55,6 +68,15 @@ class StuController extends Controller {
     }
 
     this.ctx.body = { activityList };
+  }
+  async applyCAByInsId() {
+    const insId = this.ctx.params.id;
+    const sql = `UPDATE activity SET  state = 4 WHERE id = ${insId} `;
+    const re = await this.app.mysql.query(sql);
+    const updateSuccess = re.affectedRows === 1;
+    this.ctx.body = {
+      updateSuccess,
+    };
   }
   async getActivityByActivityId() {
     const activityId = this.ctx.request.body.activityId;
